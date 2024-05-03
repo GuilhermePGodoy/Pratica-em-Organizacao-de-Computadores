@@ -11,32 +11,8 @@ DATA_RADIX=BIN;
 
 CONTENT BEGIN
 
--- CARACTERES LIVRES PARA EDICAO
-
--- Costuma-se deixar o primeiro simbolo sempre preto
-	[0..7]  :   00000000;
-
--- Sapo
-	  8  :   00111100;
-	  9  :   00111100;
-	 10  :   00011000;
-	 11  :   11111111;
-	 12  :   00011000;
-	 13  :   00100100;
-	 14  :   01100110;
-	 15  :   00000000;
-
--- Bolinha
-	 16  :   00000000;
-	 17  :   00011000;
-	 18  :   00111100;
-	 19  :   01111110;
-	 20  :   01111110;
-	 21  :   00111100;
-	 22  :   00011000;
-	 23  :   00000000;
-
-	[24..255]  :   00000000;
+-- CARACTERES DE CONTROLE - LIVRES PARA EDICAO
+	[0..255]  :   00000000;
 
 -- SPACE
 	[256..263]  :   00000000;

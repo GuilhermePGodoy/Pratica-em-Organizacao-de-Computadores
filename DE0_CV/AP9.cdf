@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(5CEBA4F23) Path("C:/Users/14576277/Desktop/DE0_CV/") File("AP9.sof") MfrSpec(OpMask(1));
+		Device PartName(5CEBA4F23) Path("C:/Users/14576277/Documents/DE0_CV/") File("AP9.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

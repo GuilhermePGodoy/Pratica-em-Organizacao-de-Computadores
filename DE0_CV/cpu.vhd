@@ -361,7 +361,7 @@ begin
 				IncPC := '1';
 				
 				state := exec;  -- Vai para o estado de Executa para buscar o dado do endereco
-			END IF;			
+			END IF;		
 			
 				
 
@@ -459,14 +459,17 @@ begin
 				M4 := x"0001";
 				X <= M3;
 				Y <= M4;
+				
+				selM2 := sULA;
+				LoadReg(RX) := '1';
+				
 				OP(5 DOWNTO 4) <= ARITH;
+				
 				IF(IR(6) = '0') THEN
 					OP(3 DOWNTO 0) <= ADD;
 				ELSE
 					OP(3 DOWNTO 0) <= SUB;
 				END IF;
-				selM2 := sULA;
-				LoadReg(RX) := '1';
 
 				selM6 := sULA;
 				LoadFR := '1';
@@ -482,13 +485,16 @@ begin
 				M4 := Reg(RZ);
 				X <= M3;
 				Y <= M4;
+				
 				OP(6) <= IR(0);
 				OP(5 DOWNTO 0) <= IR(15 DOWNTO 10);
+				
 				selM2 := sULA;
 				LoadReg(RX) := '1';
-					
+			
 				selM6 := sULA;
-				LoadFR := '1';
+				LoadFR := '1';	
+
 				state := fetch;
 			END IF;			
 		
@@ -568,8 +574,7 @@ begin
 -- JMP Condition: (UNconditional, EQual, Not Equal, Zero, Not Zero, CarRY, Not CarRY, GReater, LEsser, Equal or Greater, Equal or Lesser, OVerflow, Not OVerflow, Negative, DIVbyZero, NOT USED)	
 --========================================================================
 			IF(IR(15 DOWNTO 10) = CALL) THEN
-				IF((IR(9 DOWNTO 6) = "0000") 
-					IF((IR(9 DOWNTO 6) = "0000") OR
+				IF((IR(9 DOWNTO 6) = "0000") OR
 					((IR(9 DOWNTO 6) = "0111") AND FR(0) = '1') OR
 					((IR(9 DOWNTO 6) = "1001") AND (FR(2) = '1' OR FR(0) = '1')) OR
 					((IR(9 DOWNTO 6) = "1000") AND FR(1) = '1') OR
@@ -585,21 +590,23 @@ begin
 					((IR(9 DOWNTO 6) = "1101") AND FR(6) = '1') OR
 					((IR(9 DOWNTO 6) = "1110") AND FR(9) = '1')) THEN
 						M1 <= SP;
-						RW <= '1';
 						M5 <= PC;
+						RW <= '1';
+
 						DecSP := '1';
 						state := exec;
 					ELSE
-						IncPC <= '1';
+						IncPC := '1';
 						state := fetch;
 					END IF;
 				END IF;
-			END IF;
 
 --========================================================================
 -- RTS 			PC <- Mem[SP]
 --========================================================================				
 			IF(IR(15 DOWNTO 10) = RTS) THEN
+			
+				IncSP := '1';
 
 				state := exec;
 			END IF;
@@ -608,6 +615,18 @@ begin
 -- PUSH RX
 --========================================================================		
 			IF(IR(15 DOWNTO 10) = PUSH) THEN
+			
+				M1 <= SP;
+				RW <= '1';
+				
+				IF(IR(6) = '0') THEN
+					M3 := Reg(RX);
+				ELSE
+					M3 := FR;
+				END IF;
+				
+				M5 <= M3;
+				DecSP := '1';
 				
 				state := fetch;
 			END IF;
@@ -616,6 +635,8 @@ begin
 -- POP RX
 --========================================================================
 			IF(IR(15 DOWNTO 10) = POP) THEN
+			
+				IncSP := '1';
 				
 				state := exec;
 			END IF;						
@@ -703,6 +724,9 @@ begin
 -- EXEC CALL    Pilha <- PC e PC <- 16bit END :
 --========================================================================
 			IF(IR(15 DOWNTO 10) = CALL) THEN
+				M1 <= PC;
+				RW <= '0';
+				LoadPC := '1';
 				
 				state := fetch;
 			END IF;
@@ -711,6 +735,10 @@ begin
 -- EXEC RTS 			PC <- Mem[SP]
 --========================================================================
 			IF(IR(15 DOWNTO 10) = RTS) THEN
+			
+				M1 <= SP;
+				RW <= '0';
+				LoadPC := '1';
 				
 				state := exec2;
 			END IF;
@@ -719,9 +747,20 @@ begin
 -- EXEC POP RX/FR
 --========================================================================
 			IF(IR(15 DOWNTO 10) = POP) THEN
+			
+				M1 <= SP;
+				RW <= '0';
+				
+				IF(IR(6) = '0') THEN
+					selM2 := sMem;
+					LoadReg(RX) := '1';
+				ELSE
+					selM6 := sMem;
+					LoadFR := '1';
+				END IF;
 				
 				state := fetch;
-			END IF;		
+			END IF;
 		
 -- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 				
@@ -735,6 +774,8 @@ begin
 -- EXEC2 RTS 			PC <- Mem[SP]
 --========================================================================
 			IF(IR(15 DOWNTO 10) = RTS) THEN
+			
+				IncPC := '1';
 				
 				state := fetch;
 			END IF;				
