@@ -527,6 +527,8 @@ begin
 			IF(IR(15 DOWNTO 14) = LOGIC AND IR(13 DOWNTO 10) = CMP) THEN 
 				M3 := Reg(RX);
 				M4 := Reg(RY);
+				X <= M3;
+				Y <= M4;
 				
 				OP(5 DOWNTO 0) <= IR(15 DOWNTO 10);
 				
@@ -589,17 +591,22 @@ begin
 					((IR(9 DOWNTO 6) = "1100") AND FR(5) = '0') OR
 					((IR(9 DOWNTO 6) = "1101") AND FR(6) = '1') OR
 					((IR(9 DOWNTO 6) = "1110") AND FR(9) = '1')) THEN
-						M1 <= SP;
-						M5 <= PC;
-						RW <= '1';
+					
+					M1 <= SP;
+					M5 <= PC;
+					RW <= '1';
 
-						DecSP := '1';
-						state := exec;
-					ELSE
-						IncPC := '1';
-						state := fetch;
-					END IF;
+					DecSP := '1';
+					state := exec;
+				
+				ELSE
+
+					IncPC := '1';
+					state := fetch;
+
 				END IF;
+
+			END IF;
 
 --========================================================================
 -- RTS 			PC <- Mem[SP]
@@ -624,7 +631,7 @@ begin
 				ELSE
 					M3 := FR;
 				END IF;
-				
+
 				M5 <= M3;
 				DecSP := '1';
 				
