@@ -91,6 +91,13 @@ apagaEsquerda:
 
 loopApagaEsquerda:
 	outchar r4, r0
+
+	nop
+	nop
+	nop
+	nop
+	nop
+
 	outchar r4, r1
 
 	inc r3 ;Incrementa contador.
@@ -416,6 +423,12 @@ apagaPassaro: ;Posição deve estar em r4
 
 	outchar r0, r4
 
+	nop
+	nop
+	nop
+	nop
+	nop
+
 	dec r4
 
 	outchar r0, r4
@@ -503,7 +516,7 @@ incCont:
 	load r0, cont
 	inc r0
 	store cont, r0
-	loadn r1, #26 ;Máximo de iterações até a vitória.
+	loadn r1, #21 ;Máximo de iterações até a vitória.
 	cmp r0, r1
 
 	jne naoAcabou
