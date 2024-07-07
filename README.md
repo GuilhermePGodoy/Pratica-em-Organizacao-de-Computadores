@@ -6,7 +6,7 @@ A pasta DE0_CV contém o projeto do processador. Dentro dela, o arquivo cpu.vhd 
 O jogo desenvolvido foi uma versão do famoso jogo Flappy Bird.
 O objetivo é passar pelos obstáculos sem tocá-los e sem tocar o chão. Para manter o passarinho voando, deve-se pressionar a tecla de espaço.
 <br/>
-Vídeo apresentando o jogo: https://www.youtube.com/
+Vídeo apresentando o jogo: https://youtu.be/XVGeayRP1BM
 
 
 <h4>Screenshots do jogo</h4>
